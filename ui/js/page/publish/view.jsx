@@ -760,11 +760,85 @@ class PublishPage extends React.PureComponent {
             </div>
           </section>
 
+<<<<<<< HEAD
           <ChannelSection
             {...this.props}
             handleChannelChange={this.handleChannelChange.bind(this)}
             channel={this.state.channel}
           />
+=======
+          <section className="card">
+            <div className="card__title-primary">
+              <h4>{__("Identity")}</h4>
+              <div className="card__subtitle">
+                {__("Who created this content?")}
+              </div>
+            </div>
+            <div className="card__content">
+              {this.props.fetchingChannels
+                ? <BusyMessage message="Fetching identities" />
+                : <FormRow
+                    type="select"
+                    tabIndex="1"
+                    onChange={event => {
+                      this.handleChannelChange(event);
+                    }}
+                    value={this.state.channel}
+                  >
+                    <option key="anonymous" value="anonymous">
+                      {__("Anonymous")}
+                    </option>
+                    {this.props.channels.map(({ name }) =>
+                      <option key={name} value={name}>{name}</option>
+                    )}
+                    <option key="new" value="new">
+                      {__("New identity...")}
+                    </option>
+                  </FormRow>}
+            </div>
+            {this.state.channel == "new"
+              ? <div className="card__content">
+                  <FormRow
+                    label={__("Name")}
+                    type="text"
+                    onChange={event => {
+                      this.handleNewChannelNameChange(event);
+                    }}
+                    ref={newChannelName => {
+                      this.refs.newChannelName = newChannelName;
+                    }}
+                    value={this.state.newChannelName}
+                  />
+                  <FormRow
+                    label={__("Deposit")}
+                    postfix="LBC"
+                    step="0.01"
+                    min="0"
+                    type="number"
+                    helper={lbcInputHelp}
+                    onChange={event => {
+                      this.handleNewChannelBidChange(event);
+                    }}
+                    value={this.state.newChannelBid}
+                  />
+                  <div className="form-row-submit">
+                    <Link
+                      button="primary"
+                      label={
+                        !this.state.creatingChannel
+                          ? __("Create identity")
+                          : __("Creating identity...")
+                      }
+                      onClick={event => {
+                        this.handleCreateChannelClick(event);
+                      }}
+                      disabled={this.state.creatingChannel}
+                    />
+                  </div>
+                </div>
+              : null}
+          </section>
+>>>>>>> Move fetching my channels into redux
 
           <section className="card">
             <div className="card__title-primary">
