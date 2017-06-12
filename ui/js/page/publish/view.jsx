@@ -234,60 +234,14 @@ class PublishPage extends React.PureComponent {
     if (this.state.channel !== "anonymous") channel = this.state.channel;
 
     const name = rawName.toLowerCase();
-    const uri = lbryuri.build({ contentName: name, channelName: channel });
+    const uri = lbryuri.normalize(name);
     this.setState({
       rawName: rawName,
       name: name,
-      prefillDone: false,
       uri,
     });
 
-    if (this.resolveUriTimeout) {
-      clearTimeout(this.resolveUriTimeout);
-      this.resolveUriTimeout = undefined;
-    }
-    const resolve = () => this.props.resolveUri(uri);
-
-    this.resolveUriTimeout = setTimeout(resolve.bind(this), 500, {
-      once: true,
-    });
-  }
-
-  handlePrefillClicked() {
-    const {license, licenseUrl, title, thumbnail, description,
-           language, nsfw} = this.myClaimInfo().value.stream.metadata;
-
-    let newState = {
-      meta_title: title,
-      meta_thumbnail: thumbnail,
-      meta_description: description,
-      meta_language: language,
-      meta_nsfw: nsfw,
-    };
-
-    if (license == this._defaultCopyrightNotice) {
-      newState.licenseType = "copyright";
-      newState.copyrightNotice = this._defaultCopyrightNotice;
-    } else {
-      // If the license URL or description matches one of the drop-down options, use that
-      let licenseType = "other"; // Will be overridden if we find a match
-      for (let option of this._meta_license.getOptions()) {
-        if (
-          option.getAttribute("data-url") === licenseUrl ||
-          option.text === license
-        ) {
-          licenseType = option.value;
-        }
-      }
-
-      if (licenseType == "other") {
-        newState.otherLicenseDescription = license;
-        newState.otherLicenseUrl = licenseUrl;
-      }
-      newState.licenseType = licenseType;
-    }
-
-    this.setState(newState);
+    this.props.resolveUri(uri);
   }
 
   handleBidChange(event) {
@@ -441,8 +395,7 @@ class PublishPage extends React.PureComponent {
   getNameBidHelpText() {
     if (
       this.state.uri &&
-      this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
-      this.claim() === undefined
+      this.props.resolvingUris.indexOf(this.state.uri) !== -1
     ) {
       return <BusyMessage />;
     } else if (!this.state.name) {
@@ -760,85 +713,11 @@ class PublishPage extends React.PureComponent {
             </div>
           </section>
 
-<<<<<<< HEAD
           <ChannelSection
             {...this.props}
             handleChannelChange={this.handleChannelChange.bind(this)}
             channel={this.state.channel}
           />
-=======
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__("Identity")}</h4>
-              <div className="card__subtitle">
-                {__("Who created this content?")}
-              </div>
-            </div>
-            <div className="card__content">
-              {this.props.fetchingChannels
-                ? <BusyMessage message="Fetching identities" />
-                : <FormRow
-                    type="select"
-                    tabIndex="1"
-                    onChange={event => {
-                      this.handleChannelChange(event);
-                    }}
-                    value={this.state.channel}
-                  >
-                    <option key="anonymous" value="anonymous">
-                      {__("Anonymous")}
-                    </option>
-                    {this.props.channels.map(({ name }) =>
-                      <option key={name} value={name}>{name}</option>
-                    )}
-                    <option key="new" value="new">
-                      {__("New identity...")}
-                    </option>
-                  </FormRow>}
-            </div>
-            {this.state.channel == "new"
-              ? <div className="card__content">
-                  <FormRow
-                    label={__("Name")}
-                    type="text"
-                    onChange={event => {
-                      this.handleNewChannelNameChange(event);
-                    }}
-                    ref={newChannelName => {
-                      this.refs.newChannelName = newChannelName;
-                    }}
-                    value={this.state.newChannelName}
-                  />
-                  <FormRow
-                    label={__("Deposit")}
-                    postfix="LBC"
-                    step="0.01"
-                    min="0"
-                    type="number"
-                    helper={lbcInputHelp}
-                    onChange={event => {
-                      this.handleNewChannelBidChange(event);
-                    }}
-                    value={this.state.newChannelBid}
-                  />
-                  <div className="form-row-submit">
-                    <Link
-                      button="primary"
-                      label={
-                        !this.state.creatingChannel
-                          ? __("Create identity")
-                          : __("Creating identity...")
-                      }
-                      onClick={event => {
-                        this.handleCreateChannelClick(event);
-                      }}
-                      disabled={this.state.creatingChannel}
-                    />
-                  </div>
-                </div>
-              : null}
-          </section>
->>>>>>> Move fetching my channels into redux
 
           <section className="card">
             <div className="card__title-primary">
