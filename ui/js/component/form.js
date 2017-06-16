@@ -97,6 +97,10 @@ export class FormField extends React.PureComponent {
     return this.refs.field.options[this.refs.field.selectedIndex];
   }
 
+  getOptions() {
+    return this.refs.field.options;
+  }
+
   render() {
     // Pass all unhandled props to the field element
     const otherProps = Object.assign({}, this.props),
@@ -224,6 +228,10 @@ export class FormRow extends React.PureComponent {
 
   getSelectedElement() {
     return this.refs.field.getSelectedElement();
+  }
+
+  getOptions() {
+    return this.refs.field.getOptions();
   }
 
   focus() {
