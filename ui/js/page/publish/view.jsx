@@ -234,14 +234,22 @@ class PublishPage extends React.PureComponent {
     if (this.state.channel !== "anonymous") channel = this.state.channel;
 
     const name = rawName.toLowerCase();
-    const uri = lbryuri.normalize(name);
+    const uri = lbryuri.build({ contentName: name, channelName: channel });
     this.setState({
       rawName: rawName,
       name: name,
       uri,
     });
 
-    this.props.resolveUri(uri);
+    if (this.resolveUriTimeout) {
+      clearTimeout(this.resolveUriTimeout);
+      this.resolveUriTimeout = undefined;
+    }
+    const resolve = () => this.props.resolveUri(uri);
+
+    this.resolveUriTimeout = setTimeout(resolve.bind(this), 500, {
+      once: true,
+    });
   }
 
   handleBidChange(event) {
@@ -395,7 +403,8 @@ class PublishPage extends React.PureComponent {
   getNameBidHelpText() {
     if (
       this.state.uri &&
-      this.props.resolvingUris.indexOf(this.state.uri) !== -1
+      this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
+      this.claim() === undefined
     ) {
       return <BusyMessage />;
     } else if (!this.state.name) {
