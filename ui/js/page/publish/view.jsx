@@ -406,7 +406,7 @@ class PublishPage extends React.PureComponent {
       this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
       this.claim() === undefined
     ) {
-      return <BusyMessage />;
+      return __("Checking...");
     } else if (!this.state.name) {
       return __("Select a URL for this publish.");
     } else if (!this.claim()) {

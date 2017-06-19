@@ -117,6 +117,9 @@ input[type="text"].input-copyable {
     border: $width-input-border solid $color-form-border;
   }
 }
+.form-field--SimpleMDE {
+  display: block;
+}
 
 .form-field__label {
   &[for] {  cursor: pointer; }

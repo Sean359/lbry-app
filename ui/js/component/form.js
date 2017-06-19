@@ -1,8 +1,9 @@
 import React from "react";
 import FileSelector from "./file-selector.js";
 import SimpleMDE from "react-simplemde-editor";
+import style from "react-simplemde-editor/dist/simplemde.min.css";
 
-var formFieldCounter = 0,
+let formFieldCounter = 0,
   formFieldFileSelectorTypes = ["file", "directory"],
   formFieldNestedLabelTypes = ["radio", "checkbox"];
 
@@ -24,6 +25,7 @@ export class FormField extends React.PureComponent {
     this._fieldRequiredText = __("This field is required");
     this._type = null;
     this._element = null;
+    this._extraElementProps = {};
 
     this.state = {
       isError: null,
@@ -41,6 +43,9 @@ export class FormField extends React.PureComponent {
     } else if (this.props.type == "SimpleMDE") {
       this._element = SimpleMDE;
       this._type = "textarea";
+      this._extraElementProps.options = {
+        hideIcons: ["guide", "heading", "image", "fullscreen"],
+      };
     } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
       this._element = "input";
       this._type = "hidden";
@@ -130,6 +135,7 @@ export class FormField extends React.PureComponent {
           (isError ? "form-field__input--error" : "")
         }
         {...otherProps}
+        {...this._extraElementProps}
       >
         {this.props.children}
       </this._element>
