@@ -1,8 +1,6 @@
 import React from "react";
 import FileSelector from "./file-selector.js";
-import { Icon } from "./common.js";
 import SimpleMDE from "react-simplemde-editor";
-import style from "react-simplemde-editor/dist/simplemde.min.css";
 
 var formFieldCounter = 0,
   formFieldFileSelectorTypes = ["file", "directory"],
