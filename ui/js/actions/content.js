@@ -354,3 +354,39 @@ export function doCreateChannel(name, amount) {
     });
   };
 }
+
+export function doPublish(params) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.PUBLISH_STARTED,
+      data: {
+        params,
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+      const success = claim => {
+        claim.name = params.name;
+        claim.channel_name = params.channel_name;
+        dispatch({
+          type: types.PUBLISH_COMPLETED,
+          data: {
+            claim,
+          },
+        });
+        resolve(claim);
+      };
+      const failure = error => {
+        dispatch({
+          type: types.PUBLISH_FAILED,
+          data: {
+            error,
+          },
+        });
+        reject(error);
+      };
+
+      lbry.publish(params).then(success, failure);
+    });
+  };
+}

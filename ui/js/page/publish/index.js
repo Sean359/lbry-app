@@ -14,6 +14,7 @@ import {
   doFetchChannelListMine,
   doResolveUri,
   doCreateChannel,
+  doPublish,
 } from "actions/content";
 import rewards from "rewards";
 import PublishPage from "./view";
@@ -35,6 +36,7 @@ const perform = dispatch => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   resolveUri: uri => dispatch(doResolveUri(uri)),
   createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
+  publish: params => dispatch(doPublish(params)),
 });
 
 export default connect(select, perform)(PublishPage);

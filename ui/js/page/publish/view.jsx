@@ -116,16 +116,11 @@ class PublishPage extends React.PureComponent {
         publishArgs.file_path = this.refs.file.getValue();
       }
 
-      lbry.publishDeprecated(
-        publishArgs,
-        message => {
-          this.handlePublishStarted();
-        },
-        null,
-        error => {
-          this.handlePublishError(error);
-        }
-      );
+      const success = claim => {};
+      const failure = error => this.handlePublishError(error);
+
+      this.handlePublishStarted();
+      this.props.publish(publishArgs).then(success, failure);
     };
 
     if (this.state.isFee) {
@@ -742,7 +737,9 @@ class PublishPage extends React.PureComponent {
             </div>
             <div className="card__content">
               <FormRow
-                prefix="lbry://"
+                prefix={`lbry://${this.state.channel === "anonymous"
+                  ? ""
+                  : `${this.state.channel}/`}`}
                 type="text"
                 ref="name"
                 placeholder="myname"
@@ -954,7 +951,7 @@ class ChannelSection extends React.PureComponent {
     if (channels.length > 0) {
       channelContent.push(
         <FormRow
-          key={this.props.channel}
+          key="channel"
           type="select"
           tabIndex="1"
           onChange={this.handleChannelChange.bind(this)}
@@ -973,11 +970,13 @@ class ChannelSection extends React.PureComponent {
       );
       if (fetchingChannels) {
         channelContent.push(
-          <BusyMessage message="Updating channels" key="something" />
+          <BusyMessage message="Updating channels" key="loading" />
         );
       }
     } else if (fetchingChannels) {
-      channelContent.push(<BusyMessage message="Loading channels" />);
+      channelContent.push(
+        <BusyMessage message="Loading channels" key="loading" />
+      );
     }
 
     return (

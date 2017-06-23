@@ -93,7 +93,7 @@ reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
 
 reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   const { channelClaim } = action.data;
-  const { byId } = state;
+  const byId = Object.assign({}, state.byId);
   const myChannelClaims = new Set(state.myChannelClaims);
 
   byId[channelClaim.claim_id] = channelClaim;
@@ -102,6 +102,20 @@ reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     byId,
     myChannelClaims,
+  });
+};
+
+reducers[types.PUBLISH_COMPLETED] = function(state, action) {
+  const { claim } = action.data;
+  const byId = Object.assign({}, state.byId);
+  const myClaims = new Set(state.myClaims);
+
+  byId[claim.claim_id] = claim;
+  myClaims.add(claim.claim_id);
+
+  return Object.assign({}, state, {
+    byId,
+    myClaims,
   });
 };
 
