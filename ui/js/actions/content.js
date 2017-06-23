@@ -15,6 +15,7 @@ import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
 import setBadge from "util/setBadge";
 import setProgressBar from "util/setProgressBar";
+import { doFileList } from "actions/file_info";
 import batchActions from "util/batchActions";
 
 const { ipcRenderer } = require("electron");
@@ -374,6 +375,7 @@ export function doPublish(params) {
             claim,
           },
         });
+        dispatch(doFileList());
         resolve(claim);
       };
       const failure = error => {

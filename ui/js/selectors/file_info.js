@@ -87,24 +87,16 @@ export const selectFileInfosDownloaded = createSelector(
   }
 );
 
-export const selectFileInfosPendingPublish = createSelector(
-  _selectState,
-  state => {
-    return lbry.getPendingPublishes();
-  }
-);
-
 export const selectFileInfosPublished = createSelector(
   selectFileInfosByOutpoint,
-  selectFileInfosPendingPublish,
   selectMyClaimsOutpoints,
-  (byOutpoint, pendingFileInfos, outpoints) => {
+  (byOutpoint, outpoints) => {
     const fileInfos = [];
     outpoints.forEach(outpoint => {
       const fileInfo = byOutpoint[outpoint];
       if (fileInfo) fileInfos.push(fileInfo);
     });
-    return [...fileInfos, ...pendingFileInfos];
+    return fileInfos;
   }
 );
 

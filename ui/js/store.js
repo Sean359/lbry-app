@@ -92,12 +92,13 @@ const saveClaimsFilter = createFilter("claims", [
   "myClaims",
   "myChannelClaims",
 ]);
+const saveFileInfosFilter = createFilter("fileInfo", ["fileInfos"]);
 
 const persistOptions = {
-  whitelist: ["claims"],
+  whitelist: ["claims", "fileInfo"],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [saveClaimsFilter, compressor],
+  transforms: [saveClaimsFilter, saveFileInfosFilter, compressor],
   debounce: 1000,
   storage: localForage,
 };

@@ -136,6 +136,28 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
   });
 };
 
+// reducers[types.PUBLISH_COMPLETED] = function(state, action) {
+//   const { claim } = action.data;
+//   const uri = lbryuri.build({
+//     txid: claim.txId
+//   })
+//   const newPendingPublish = {
+//     name,
+//     channel_name,
+//     claim_id: "pending_claim_" + uri,
+//     txid: "pending_" + uri,
+//     nout: 0,
+//     outpoint: "pending_" + uri + ":0",
+//     time: Date.now(),
+//   };
+//   const fileInfos = Object.assign({}, state.fileInfos)
+//   fileInfos[newPendingPublish.outpoint] = newPendingPublish
+
+//   return Object.assign({}, state, {
+//     fileInfos,
+//   })
+// }
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
