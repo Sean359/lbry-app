@@ -406,9 +406,15 @@ class PublishPage extends React.PureComponent {
       return __("Select a URL for this publish.");
     } else if (!this.claim()) {
       return __("This URL is unused.");
-    } else if (this.myClaimExists()) {
-      return __(
-        "You have already used this URL. Publishing to it again will update your previous publish."
+    } else if (this.myClaimExists() && !this.state.prefillDone) {
+      return (
+        <Notice>
+          {__("You already have a claim with this name.")}{" "}
+          <Link
+            label={__("Use data from my existing claim")}
+            onClick={() => this.handlePrefillClicked()}
+          />
+        </Notice>
       );
     } else if (this.state.topClaimValue) {
       if (this.state.topClaimValue === 1) {
@@ -749,15 +755,6 @@ class PublishPage extends React.PureComponent {
                 }}
                 helper={this.getNameBidHelpText()}
               />
-              {this.myClaimExists() && !this.state.prefillDone
-                ? <Notice>
-                    {__("You already have a claim with this name.")}{" "}
-                    <Link
-                      label={__("Use data from my existing claim")}
-                      onClick={() => this.handlePrefillClicked()}
-                    />
-                  </Notice>
-                : null}
             </div>
             {this.state.rawName
               ? <div className="card__content">
