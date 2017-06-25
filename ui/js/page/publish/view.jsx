@@ -416,8 +416,8 @@ class PublishPage extends React.PureComponent {
           />
         </Notice>
       );
-    } else if (this.state.topClaimValue) {
-      if (this.state.topClaimValue === 1) {
+    } else if (this.claim()) {
+      if (this.topClaimValue() === 1) {
         return (
           <span>
             {__(
@@ -431,7 +431,7 @@ class PublishPage extends React.PureComponent {
           <span>
             {__(
               'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.state.topClaimValue,
+              this.topClaimValue(),
               this.state.name
             )}
           </span>
