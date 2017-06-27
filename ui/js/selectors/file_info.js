@@ -69,6 +69,11 @@ export const makeSelectLoadingForUri = () => {
   return createSelector(selectLoadingForUri, loading => !!loading);
 };
 
+export const selectFileInfosPendingPublish = createSelector(
+  _selectState,
+  state => Object.values(state.pendingByOutpoint || {})
+);
+
 export const selectFileInfosDownloaded = createSelector(
   selectFileInfosByOutpoint,
   selectMyClaimsOutpoints,
@@ -90,7 +95,8 @@ export const selectFileInfosDownloaded = createSelector(
 export const selectFileInfosPublished = createSelector(
   selectFileInfosByOutpoint,
   selectMyClaimsOutpoints,
-  (byOutpoint, outpoints) => {
+  selectFileInfosPendingPublish,
+  (byOutpoint, outpoints, pendingPublish) => {
     const fileInfos = [];
     outpoints.forEach(outpoint => {
       const fileInfo = byOutpoint[outpoint];
@@ -125,24 +131,6 @@ export const selectFileInfosByUri = createSelector(
         if (fileInfo) fileInfos[uri] = fileInfo;
       }
     });
-
-    return fileInfos;
-  }
-);
-
-export const selectDownloadingFileInfos = createSelector(
-  selectUrisDownloading,
-  selectFileInfosByUri,
-  (urisDownloading, byUri) => {
-    const uris = Object.keys(urisDownloading);
-    const fileInfos = [];
-
-    uris.forEach(uri => {
-      const fileInfo = byUri[uri];
-
-      if (fileInfo) fileInfos.push(fileInfo);
-    });
-
     return fileInfos;
   }
 );

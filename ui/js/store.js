@@ -92,7 +92,10 @@ const saveClaimsFilter = createFilter("claims", [
   "myClaims",
   "myChannelClaims",
 ]);
-const saveFileInfosFilter = createFilter("fileInfo", ["fileInfos"]);
+const saveFileInfosFilter = createFilter("fileInfo", [
+  "fileInfos",
+  "pendingByOutpoint",
+]);
 
 const persistOptions = {
   whitelist: ["claims", "fileInfo"],

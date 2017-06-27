@@ -358,10 +358,28 @@ export function doCreateChannel(name, amount) {
 
 export function doPublish(params) {
   return function(dispatch, getState) {
+    let uri;
+    const { name, channel_name } = params;
+    if (channel_name) {
+      uri = lbryuri.build({ name: channel_name, path: name }, false);
+    } else {
+      uri = lbryuri.build({ name: name }, false);
+    }
+    const pendingPublish = {
+      name,
+      channel_name,
+      claim_id: "pending_claim_" + uri,
+      txid: "pending_" + uri,
+      nout: 0,
+      outpoint: "pending_" + uri + ":0",
+      time: Date.now(),
+    };
+
     dispatch({
       type: types.PUBLISH_STARTED,
       data: {
         params,
+        pendingPublish,
       },
     });
 
@@ -373,6 +391,8 @@ export function doPublish(params) {
           type: types.PUBLISH_COMPLETED,
           data: {
             claim,
+            uri,
+            pendingPublish,
           },
         });
         dispatch(doFileList());
@@ -383,6 +403,9 @@ export function doPublish(params) {
           type: types.PUBLISH_FAILED,
           data: {
             error,
+            params,
+            uri,
+            pendingPublish,
           },
         });
         reject(error);
