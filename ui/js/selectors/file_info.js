@@ -135,6 +135,23 @@ export const selectFileInfosByUri = createSelector(
   }
 );
 
+export const selectDownloadingFileInfos = createSelector(
+  selectUrisDownloading,
+  selectFileInfosByUri,
+  (urisDownloading, byUri) => {
+    const uris = Object.keys(urisDownloading);
+    const fileInfos = [];
+
+    uris.forEach(uri => {
+      const fileInfo = byUri[uri];
+
+      if (fileInfo) fileInfos.push(fileInfo);
+    });
+
+    return fileInfos;
+  }
+);
+
 export const selectTotalDownloadProgress = createSelector(
   selectDownloadingFileInfos,
   fileInfos => {
